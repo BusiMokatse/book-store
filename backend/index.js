@@ -36,7 +36,7 @@ app.post('/books', async (request, response) => {
     console.log(error);
     response.status(500).send({message:error.message})
   }
-})
+});
 
 // Get All Books from DB
 app.get('/books', async (request, response) => {
@@ -50,7 +50,7 @@ app.get('/books', async (request, response) => {
     console.log(error.message);
     response.status(500).send({ message: error.message});    
   }
-})
+});
 
 // Get Book by Id
 app.get('/books/:id', async (request, response) => {
@@ -60,12 +60,51 @@ app.get('/books/:id', async (request, response) => {
     return response.status(200).json(book);
   } catch (error) {
     console.log(error.message);
-    response.status(500).send({ message: error.message});
+    response.status(500).send({ message: error.message });
   }
-  
-})
+});
 
+// Update Book
+app.put('/books/:id', async (request, response) => {
+  try {
+        if (!request.body.title ||
+        !request.body.author ||
+        !request.body.publishYear
+    ) {
+      return response.status(400).send({
+        message: 'Send all required fields: title, authot, publishYear'
+      })
+    }
 
+    const { id } = request.params;
+    const book = await Book.findByIdAndUpdate(id, request.body);
+    
+    if (!book) {
+      return response.status(404).send({ message: "Book not found"})
+    }
+    return response.status(200).send({ message: "Book update successfully"})
+  } catch (error) {
+    console.log(error.message);
+    response.status(500).send({ message: error.message });
+  }
+});
+
+// Delete Book
+app.delete('/books/:id', async (request, response) => {
+  try {
+    const { id } = request.params;
+    const book = await Book.findByIdAndDelete(id);
+
+    if (!book) {
+      return response.status(404).json({ message: "Book not found"});
+    }
+    return response.status(200).json({ message: "Book deleted successfully"});
+    
+  } catch (error) {
+    console.log(error.message);
+    response.status(500).send({ message: error.message });    
+  }
+});
 
 mongoose
   .connect(mongoDBURL)
