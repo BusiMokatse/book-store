@@ -1,0 +1,19 @@
+meta {
+  name: Save New Book
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:5555/books
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "title": "A Mind Full of Murder",
+    "author": "Derek Landy",
+    "publishYear": "2023"
+  }
+}
