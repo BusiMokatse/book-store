@@ -10,7 +10,7 @@ const app = express();
 // Middleware for parsing request body
 app.use(express.json());
 
-// Middleware for handling CORS Policy
+// Middleware for handling CORS Policy using custom origins
 app.use(
   cors({
     origin: "http://localhost:3000",
